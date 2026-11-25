@@ -11,22 +11,21 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
           },
           colors: {
-            canvas: '#F7F8FA',
-            ink: '#191F28',
-            sub: '#4E5968',
+            ink: '#111827',
+            sub: '#4B5563',
             muted: '#8B95A1',
             line: '#E5E8EB',
-            brand: '#3182F6',
-            brandHover: '#1B64DA',
-            danger: '#F04452',
-            dangerSoft: '#FFF0F1',
-            warn: '#E5850B',
-            warnSoft: '#FFF8EB',
-            safe: '#00A86B',
-            safeSoft: '#EDFAF4',
+            brand: '#2563EB',
+            brandHover: '#1D4ED8',
+            danger: '#EF4444',
+            dangerSoft: '#FEF2F2',
+            warn: '#D97706',
+            warnSoft: '#FFFBEB',
+            safe: '#059669',
+            safeSoft: '#ECFDF5',
           },
         },
       },
@@ -35,50 +34,48 @@
   <style>
     html, body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      background-color: #F7F8FA;
-      color: #191F28;
-      letter-spacing: -0.02em;
+      color: #111827;
+      letter-spacing: -0.025em;
       -webkit-font-smoothing: antialiased;
+      background-color: #FAFAFB;
+      background-image:
+        radial-gradient(at 12% 4%, rgba(37, 99, 235, 0.06) 0px, transparent 42%),
+        radial-gradient(at 88% 8%, rgba(5, 150, 105, 0.05) 0px, transparent 38%);
+      background-attachment: fixed;
     }
-    .card {
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .surface {
       background: #FFFFFF;
-      border: 1px solid #EAECEF;
-      box-shadow: 0 2px 12px rgba(17, 24, 39, 0.035);
+      border: 1px solid rgba(17, 24, 39, 0.07);
+      box-shadow: 0 1px 2px rgba(17, 24, 39, 0.03), 0 12px 32px rgba(17, 24, 39, 0.04);
     }
-    .card-elevated {
-      background: #FFFFFF;
-      border: 1px solid #E5E8EB;
-      box-shadow: 0 12px 32px rgba(25, 31, 40, 0.08);
+    .surface-float {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(17, 24, 39, 0.09);
+      box-shadow: 0 20px 50px rgba(17, 24, 39, 0.09), 0 2px 8px rgba(17, 24, 39, 0.04);
     }
-    .custom-scroll::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #D1D6DB;
-      border-radius: 999px;
-    }
-    .checkbox-custom {
+    .checkbox-modern {
       appearance: none;
       width: 20px;
       height: 20px;
-      border: 1.5px solid #D1D6DB;
+      border: 1.5px solid #D1D5DB;
       border-radius: 6px;
       background: #FFFFFF;
       cursor: pointer;
       display: inline-grid;
       place-content: center;
-      transition: all 0.15s ease;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
       flex-shrink: 0;
     }
-    .checkbox-custom:checked {
-      background: #3182F6;
-      border-color: #3182F6;
+    .checkbox-modern:checked {
+      background: #2563EB;
+      border-color: #2563EB;
     }
-    .checkbox-custom:checked::after {
+    .checkbox-modern:checked::after {
       content: "";
       width: 10px;
       height: 6px;
@@ -86,354 +83,435 @@
       border-bottom: 2px solid #FFFFFF;
       transform: rotate(-45deg) translate(1px, -1px);
     }
-    .tab-btn {
-      transition: all 0.15s ease;
+    .row-scanning {
+      background: #EFF6FF !important;
+      border-color: #93C5FD !important;
+      transform: translateX(3px);
     }
-    .tab-active {
+    .gauge-ring {
+      transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.4s ease;
+    }
+    .pill-tab {
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .pill-active {
+      background: #111827;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(17, 24, 39, 0.14);
+    }
+    .pill-inactive {
       background: #FFFFFF;
-      color: #191F28;
-      box-shadow: 0 1px 4px rgba(17, 24, 39, 0.08);
+      color: #4B5563;
+      border: 1px solid #E5E7EB;
     }
-    .tab-inactive {
-      color: #6B7684;
+    .pill-inactive:hover {
+      color: #111827;
+      border-color: #D1D5DB;
     }
-    .tab-inactive:hover {
-      color: #191F28;
-    }
-    .fade-in {
-      animation: fadeIn 0.22s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 999px; }
+    .fade-up { animation: fadeUp 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Top Navigation -->
-  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-line">
+  <!-- Floating Glass Header -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-black/[0.06]">
     <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-4">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="w-8 h-8 rounded-[10px] bg-ink flex items-center justify-center text-white shadow-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             <path d="m9 12 2 2 4-4"/>
           </svg>
         </div>
-        <span class="font-bold text-[16px] tracking-tight text-ink">ConsentGuard</span>
-        <span class="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-md bg-[#F2F4F6] text-sub">Beta</span>
+        <span class="font-extrabold text-[16px] tracking-tight text-ink">ConsentGuard</span>
+        <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-black/[0.05] text-sub">v1.2</span>
       </div>
 
-      <!-- Segmented Control -->
-      <nav class="flex items-center p-1 rounded-xl bg-[#F2F4F6] text-[13px] font-semibold">
-        <button id="tab-web" onclick="switchDemoMode('web')" class="tab-btn tab-active px-3.5 py-1.5 rounded-lg">
-          웹 익스텐션
-        </button>
-        <button id="tab-mobile" onclick="switchDemoMode('mobile')" class="tab-btn tab-inactive px-3.5 py-1.5 rounded-lg">
-          모바일 · 보관함
-        </button>
-        <button id="tab-custom" onclick="switchDemoMode('custom')" class="tab-btn tab-inactive px-3.5 py-1.5 rounded-lg">
-          약관 직접 진단
-        </button>
-      </nav>
-
-      <div class="hidden md:flex items-center gap-1.5 text-[12px] font-medium text-sub">
-        <span class="w-2 h-2 rounded-full bg-safe"></span>
-        <span>Zero-Retention</span>
+      <div class="flex items-center gap-3 text-[12px] font-medium text-sub">
+        <span id="live-api-pill" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-line text-[11px] font-semibold text-sub">
+          <span id="live-api-dot" class="w-1.5 h-1.5 rounded-full bg-muted"></span>
+          <span id="live-api-text">엔진 확인 중</span>
+        </span>
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-safeSoft text-safe text-[11px] font-semibold">
+          Zero-Retention
+        </span>
       </div>
     </div>
   </header>
 
-  <!-- Compact Hero -->
-  <section class="max-w-6xl w-full mx-auto px-5 pt-8 pb-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
-      <div>
-        <h1 class="text-[24px] sm:text-[28px] font-bold tracking-[-0.03em] text-ink leading-snug">
-          전체 동의 누르기 전, 1초 만에 독소 조항을 걸러냅니다
-        </h1>
-        <p class="text-[14px] text-sub mt-1.5">
-          공정위 표준약관·개인정보보호법 기준으로 위험 조항을 짚어주고 필수 항목만 안전하게 체크합니다.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 text-[12px] text-muted shrink-0">
-        <span class="px-2.5 py-1 rounded-full bg-white border border-line text-sub font-medium">Chrome MV3</span>
-        <span class="px-2.5 py-1 rounded-full bg-white border border-line text-sub font-medium">온디바이스 보관함</span>
-      </div>
+  <!-- Modern SaaS Hero -->
+  <section class="max-w-6xl w-full mx-auto px-5 pt-10 pb-7 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-line text-[12px] font-semibold text-sub shadow-2xs mb-4">
+      <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+      <span>System 1 (Jev) × System 2 (모두의 AI) 2-Tier 약관 방어 엔진</span>
+    </div>
+    <h1 class="text-[30px] sm:text-[42px] font-extrabold tracking-[-0.035em] text-ink leading-[1.18]">
+      전체 동의 누르기 전,<br class="sm:hidden" />
+      <span class="text-brand">1초 만에</span> 독소 조항을 걸러냅니다
+    </h1>
+    <p class="text-[15px] text-sub mt-3 max-w-xl mx-auto leading-relaxed">
+      한국 법률 문서 5대 함정 패턴을 0~100점 점수로 진단하고, 원클릭으로 필수 항목만 안전하게 동의합니다.
+    </p>
+
+    <!-- Mode Pill Switcher -->
+    <div class="mt-6 inline-flex flex-wrap justify-center gap-2">
+      <button id="tab-web" onclick="switchDemoMode('web')" class="pill-tab pill-active px-4 py-2 rounded-full text-[13px] font-semibold">
+        실시간 웹 방어 체험
+      </button>
+      <button id="tab-custom" onclick="switchDemoMode('custom')" class="pill-tab pill-inactive px-4 py-2 rounded-full text-[13px] font-semibold">
+        약관 직접 진단 (0~100점)
+      </button>
+      <button id="tab-mobile" onclick="switchDemoMode('mobile')" class="pill-tab pill-inactive px-4 py-2 rounded-full text-[13px] font-semibold">
+        모바일 캡처 · 동의 보관함
+      </button>
     </div>
   </section>
 
-  <!-- Main Workspace -->
-  <main class="flex-1 max-w-6xl w-full mx-auto px-5 pb-14">
+  <!-- Interactive Workspace -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-5 pb-16">
 
-    <!-- ================= MODE 1: Web Extension Simulation ================= -->
-    <section id="view-web" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start fade-in">
+    <!-- ================= MODE 1: Live Web Defense Showcase ================= -->
+    <section id="view-web" class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start fade-up">
 
-      <!-- Left: Realistic Mock Sign-up Page -->
-      <div class="lg:col-span-7 card rounded-2xl overflow-hidden">
-        <!-- Browser Bar -->
-        <div class="px-5 py-3 bg-[#F9FAFB] border-b border-line flex items-center justify-between text-[12px] text-muted">
+      <!-- Left: Clean Browser Mockup -->
+      <div class="lg:col-span-7 surface rounded-[24px] overflow-hidden">
+        <!-- Minimal Browser Chrome -->
+        <div class="px-5 py-3.5 bg-[#F9FAFB] border-b border-line flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E8EB]"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E8EB]"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E8EB]"></span>
-            <span class="ml-2 px-3 py-1 rounded-md bg-white border border-line text-sub font-mono text-[11px]">
-              shop.nexus-club.kr/join
-            </span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E7EB]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E7EB]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#E5E7EB]"></span>
+            <div class="ml-2 px-3 py-1 rounded-full bg-white border border-line text-[11px] font-mono text-sub flex items-center gap-1.5">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>shop.nexus-club.kr/join</span>
+            </div>
           </div>
-          <span class="text-[11px] font-medium text-muted">체험용 가입 화면</span>
+          <button onclick="resetWebDemo()" class="text-[11px] font-semibold text-muted hover:text-ink transition">
+            데모 초기화
+          </button>
         </div>
 
         <div class="p-6 sm:p-8">
-          <div class="mb-6">
-            <span class="inline-block text-[12px] font-semibold text-brand bg-[#EBF3FE] px-2.5 py-1 rounded-md mb-2.5">
-              첫 달 0원 프로모션
-            </span>
-            <h2 class="text-[22px] font-bold text-ink tracking-tight">넥서스 멤버십 가입</h2>
-            <p class="text-[13px] text-sub mt-1">약관에 동의하시면 30일 무료 체험이 바로 시작됩니다.</p>
-          </div>
-
-          <!-- Account Preview -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-            <div class="px-3.5 py-2.5 rounded-xl bg-[#F9FAFB] border border-line">
-              <div class="text-[11px] text-muted mb-0.5">이메일</div>
-              <div class="text-[13px] font-medium text-ink">user@korea.com</div>
-            </div>
-            <div class="px-3.5 py-2.5 rounded-xl bg-[#F9FAFB] border border-line">
-              <div class="text-[11px] text-muted mb-0.5">비밀번호</div>
-              <div class="text-[13px] font-medium text-ink">••••••••••••</div>
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <span class="inline-block text-[11px] font-bold text-brand bg-[#EFF6FF] px-2.5 py-1 rounded-full mb-2">
+                첫 달 0원 무료 체험
+              </span>
+              <h2 class="text-[22px] font-bold text-ink tracking-tight">넥서스 멤버십 가입</h2>
+              <p class="text-[13px] text-sub mt-1">약관에 동의하면 30일 무료 체험이 즉시 시작됩니다.</p>
             </div>
           </div>
 
-          <!-- Terms Box -->
-          <div class="border border-line rounded-2xl p-5" id="terms-container">
-            <!-- Master All -->
-            <label class="flex items-center gap-3 pb-4 mb-4 border-b border-line cursor-pointer select-none">
-              <input type="checkbox" id="chk-all" onchange="toggleSelectAll(this.checked)" class="checkbox-custom" />
+          <!-- Terms Form -->
+          <div class="rounded-2xl border border-line bg-[#FAFAFB]/70 p-4 sm:p-5" id="terms-container">
+            <label class="flex items-center gap-3 pb-4 mb-3.5 border-b border-line cursor-pointer select-none">
+              <input type="checkbox" id="chk-all" onchange="toggleSelectAll(this.checked)" class="checkbox-modern" />
               <div>
                 <div class="text-[15px] font-bold text-ink">약관 전체 동의</div>
-                <div class="text-[12px] text-muted">선택 항목(제3자 제공·마케팅 수신) 포함</div>
+                <div class="text-[12px] text-muted">선택 항목(제3자 제공·야간 광고 수신) 포함</div>
               </div>
             </label>
 
-            <!-- Individual Clauses -->
-            <div class="space-y-3" id="checkbox-group">
-              <!-- Clause 1 -->
-              <div id="item-row-1" class="flex items-start justify-between gap-3 p-3 rounded-xl transition-all border border-transparent hover:bg-[#F9FAFB]">
+            <div class="space-y-2.5" id="checkbox-group">
+              <!-- Row 1 -->
+              <div id="item-row-1" class="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-white border border-line transition-all duration-200">
                 <label class="flex items-start gap-3 cursor-pointer select-none flex-1">
-                  <input type="checkbox" id="chk-1" onchange="updateMasterCheckboxState()" class="checkbox-custom mt-0.5" />
+                  <input type="checkbox" id="chk-1" onchange="updateMasterCheckboxState()" class="checkbox-modern mt-0.5" />
                   <div>
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="text-[12px] font-bold text-ink">[필수]</span>
-                      <span class="text-[14px] font-semibold text-ink">서비스 이용약관 및 저작권 귀속 동의</span>
-                      <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-dangerSoft text-danger">주의</span>
+                      <span class="text-[14px] font-semibold text-ink">서비스 이용약관 및 저작권 귀속</span>
+                      <span id="badge-row-1" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-dangerSoft text-danger">권리 비대칭</span>
                     </div>
-                    <p class="text-[12px] text-sub mt-1">회원 게시물의 상업적 영구 이용권 부여 및 시스템 오류 면책 포함</p>
+                    <p class="text-[12px] text-sub mt-1">게시물 저작재산권 영구 귀속 및 시스템 오류 포괄 면책 포함</p>
                   </div>
                 </label>
                 <button onclick="showClauseDetail(1)" class="text-[12px] font-medium text-muted hover:text-ink underline underline-offset-2 shrink-0 mt-0.5">전문</button>
               </div>
 
-              <!-- Clause 2 -->
-              <div id="item-row-2" class="flex items-start justify-between gap-3 p-3 rounded-xl transition-all border border-transparent hover:bg-[#F9FAFB]">
+              <!-- Row 2 -->
+              <div id="item-row-2" class="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-white border border-line transition-all duration-200">
                 <label class="flex items-start gap-3 cursor-pointer select-none flex-1">
-                  <input type="checkbox" id="chk-2" onchange="updateMasterCheckboxState()" class="checkbox-custom mt-0.5" />
+                  <input type="checkbox" id="chk-2" onchange="updateMasterCheckboxState()" class="checkbox-modern mt-0.5" />
                   <div>
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="text-[12px] font-bold text-ink">[필수]</span>
-                      <span class="text-[14px] font-semibold text-ink">개인정보 수집 및 이용 동의</span>
-                      <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-safeSoft text-safe">안전</span>
+                      <span class="text-[14px] font-semibold text-ink">개인정보 최소 수집 및 이용</span>
+                      <span id="badge-row-2" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-safeSoft text-safe">표준 부합</span>
                     </div>
-                    <p class="text-[12px] text-sub mt-1">회원 식별·결제를 위한 최소 정보 수집, 탈퇴 시 즉시 파기</p>
+                    <p class="text-[12px] text-sub mt-1">이름·이메일 최소 수집, 회원 탈퇴 시 지체 없이 파기</p>
                   </div>
                 </label>
                 <button onclick="showClauseDetail(2)" class="text-[12px] font-medium text-muted hover:text-ink underline underline-offset-2 shrink-0 mt-0.5">전문</button>
               </div>
 
-              <!-- Clause 3 -->
-              <div id="item-row-3" class="flex items-start justify-between gap-3 p-3 rounded-xl transition-all border border-transparent hover:bg-[#F9FAFB]">
+              <!-- Row 3 -->
+              <div id="item-row-3" class="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-white border border-line transition-all duration-200">
                 <label class="flex items-start gap-3 cursor-pointer select-none flex-1">
-                  <input type="checkbox" id="chk-3" onchange="updateMasterCheckboxState()" checked class="checkbox-custom mt-0.5" />
+                  <input type="checkbox" id="chk-3" onchange="updateMasterCheckboxState()" checked class="checkbox-modern mt-0.5" />
                   <div>
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="text-[12px] font-semibold text-muted">[선택]</span>
-                      <span class="text-[14px] font-medium text-ink">제휴 금융·보험 14개사 개인정보 제3자 제공</span>
-                      <span id="badge-row-3" class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-dangerSoft text-danger">위험 · 사전체크됨</span>
+                      <span id="title-row-3" class="text-[14px] font-medium text-ink">제휴 금융·보험 14개사 제3자 제공</span>
+                      <span id="badge-row-3" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-dangerSoft text-danger">사전체크 · 수치 이탈</span>
                     </div>
-                    <p class="text-[12px] text-sub mt-1">14개 보험·카드사에 이름 및 휴대전화번호 제공 (보유기간 3년)</p>
+                    <p class="text-[12px] text-sub mt-1">14개 보험·카드사 텔레마케팅 연락처 제공 (보유기간 3년)</p>
                   </div>
                 </label>
                 <button onclick="showClauseDetail(3)" class="text-[12px] font-medium text-muted hover:text-ink underline underline-offset-2 shrink-0 mt-0.5">전문</button>
               </div>
 
-              <!-- Clause 4 -->
-              <div id="item-row-4" class="flex items-start justify-between gap-3 p-3 rounded-xl transition-all border border-transparent hover:bg-[#F9FAFB]">
+              <!-- Row 4 -->
+              <div id="item-row-4" class="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-white border border-line transition-all duration-200">
                 <label class="flex items-start gap-3 cursor-pointer select-none flex-1">
-                  <input type="checkbox" id="chk-4" onchange="updateMasterCheckboxState()" checked class="checkbox-custom mt-0.5" />
+                  <input type="checkbox" id="chk-4" onchange="updateMasterCheckboxState()" checked class="checkbox-modern mt-0.5" />
                   <div>
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="text-[12px] font-semibold text-muted">[선택]</span>
-                      <span class="text-[14px] font-medium text-ink">야간 광고성 SMS 및 앱 푸시 수신</span>
-                      <span id="badge-row-4" class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-warnSoft text-warn">선택 · 해제 권장</span>
+                      <span id="title-row-4" class="text-[14px] font-medium text-ink">야간 광고성 SMS 및 앱 푸시 수신</span>
+                      <span id="badge-row-4" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-warnSoft text-warn">사전체크 · 해제 권장</span>
                     </div>
-                    <p class="text-[12px] text-sub mt-1">20:00~08:00 야간 시간대 마케팅 및 할인 쿠폰 발송 포함</p>
+                    <p class="text-[12px] text-sub mt-1">20:00~08:00 야간 시간대 마케팅·쿠폰 알림 포함</p>
                   </div>
                 </label>
                 <button onclick="showClauseDetail(4)" class="text-[12px] font-medium text-muted hover:text-ink underline underline-offset-2 shrink-0 mt-0.5">전문</button>
               </div>
             </div>
 
-            <!-- Subtle Footnote Dark Pattern -->
-            <p class="mt-4 pt-3 border-t border-line text-[11px] text-muted leading-relaxed">
-              * 무료 체험 종료(30일 후) 시 별도 통지 없이 월 9,900원 정기 결제로 자동 전환됩니다.
+            <p class="mt-4 pt-3 border-t border-line text-[11px] text-muted">
+              * 무료 체험 30일 종료 후 별도 통지 없이 월 9,900원 정기 결제로 자동 전환됩니다.
             </p>
           </div>
 
-          <!-- Submit Row -->
           <div class="mt-6 flex items-center justify-between gap-4">
-            <span class="text-[12px] text-muted">가입 완료 시 동의 보관함에 기록됩니다</span>
-            <button onclick="submitMockSignUp()" class="px-5 py-2.5 rounded-xl text-[14px] font-semibold bg-ink text-white hover:bg-[#333D4B] transition">
+            <span class="text-[12px] text-muted">가입 시 동의 내역이 내 기기 보관함에 기록됩니다</span>
+            <button onclick="submitMockSignUp()" class="px-5 py-2.5 rounded-xl text-[13px] font-bold bg-ink text-white hover:bg-black/85 transition">
               가입 완료하기
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Right: Floating Chrome Extension Assistant -->
+      <!-- Right: Floating Extension Card with 0-100 SVG Risk Gauge -->
       <div class="lg:col-span-5 space-y-4">
-        <div class="card-elevated rounded-2xl p-6">
-          <!-- Assistant Header -->
-          <div class="flex items-center justify-between pb-4 mb-4 border-b border-line">
-            <div class="flex items-center gap-2.5">
-              <div class="w-7 h-7 rounded-lg bg-brand/10 text-brand flex items-center justify-center">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-              </div>
-              <div>
-                <div class="text-[14px] font-bold text-ink leading-tight">ConsentGuard 진단</div>
-                <div class="text-[11px] text-muted">4개 약관 · 다크패턴 2건 감지</div>
+        <div class="surface-float rounded-[24px] p-6">
+          <!-- Top Row: Gauge + Risk Headline -->
+          <div class="flex items-center gap-4 pb-5 mb-5 border-b border-line">
+            <div class="relative w-20 h-20 shrink-0">
+              <svg class="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="33" fill="none" stroke="#F3F4F6" stroke-width="7" />
+                <circle id="web-gauge-circle" class="gauge-ring" cx="40" cy="40" r="33" fill="none" stroke="#EF4444" stroke-width="7" stroke-linecap="round" stroke-dasharray="207.3" stroke-dashoffset="33.2" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="web-gauge-score" class="text-[20px] font-extrabold text-ink leading-none">84</span>
+                <span class="text-[10px] font-semibold text-muted mt-0.5">/ 100</span>
               </div>
             </div>
-            <!-- Traffic Light Indicator -->
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-dangerSoft text-danger text-[12px] font-bold">
-              <span class="w-2 h-2 rounded-full bg-danger"></span>
-              위험
-            </span>
-          </div>
-
-          <!-- Summary -->
-          <div class="p-4 rounded-xl bg-[#F9FAFB] border border-line mb-4">
-            <div class="text-[11px] font-semibold text-muted mb-1">핵심 요약</div>
-            <p class="text-[13px] text-ink leading-relaxed">
-              필수 약관에 <strong class="font-semibold">게시물 저작권 영구 귀속</strong> 조항이 있고, 선택 항목에 <strong class="font-semibold text-danger">14개 보험사 제3자 제공</strong>이 사전 체크되어 있습니다.
-            </p>
-          </div>
-
-          <!-- Dark Pattern Alert -->
-          <div class="p-3.5 rounded-xl bg-dangerSoft border border-[#FFD6DA] mb-5 flex items-start gap-2.5">
-            <svg class="text-danger shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <div class="text-[12px] text-[#9F1239] leading-relaxed">
-              <strong>숨은 자동 갱신 감지</strong> — 30일 후 별도 통지 없이 월 9,900원 자동 결제 전환 조항이 각주에 포함되어 있습니다.
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span id="web-risk-pill" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-dangerSoft text-danger">위험 · RED</span>
+                <span class="text-[11px] font-medium text-muted">신뢰도 94%</span>
+              </div>
+              <div id="web-risk-headline" class="text-[16px] font-bold text-ink leading-snug">
+                법률 함정 3건이 감지되었습니다
+              </div>
+              <div class="text-[11px] text-sub mt-1">
+                System 1 판정 → System 2 해설 완료
+              </div>
             </div>
           </div>
 
-          <!-- Primary CTA -->
-          <button id="btn-safe-apply" onclick="applySafeSelection()" class="w-full py-3.5 px-4 rounded-xl bg-brand hover:bg-brandHover active:scale-[0.99] text-white font-bold text-[14px] transition flex items-center justify-center gap-2">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- 5대 법률 함정 칩 -->
+          <div class="mb-5">
+            <div class="text-[11px] font-bold text-muted uppercase tracking-wider mb-2">감지된 한국 법률 함정 패턴</div>
+            <div class="flex flex-wrap gap-1.5" id="web-trap-chips">
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-dangerSoft text-danger border border-red-100">침묵·자동 갱신</span>
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-dangerSoft text-danger border border-red-100">권리·책임 비대칭</span>
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-warnSoft text-warn border border-amber-100">수치 기준 이탈 (14개사·3년)</span>
+            </div>
+          </div>
+
+          <!-- Primary 1-Click Action -->
+          <button id="btn-safe-apply" onclick="applySafeSelectionAnimated()" class="w-full py-3.5 px-4 rounded-2xl bg-brand hover:bg-brandHover active:scale-[0.99] text-white font-bold text-[14px] shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span>필수만 안전하게 동의하기</span>
+            <span id="btn-safe-label">필수만 안전하게 동의하기</span>
           </button>
-          <p class="text-[11px] text-center text-muted mt-2">
-            사전 체크된 보험사 제3자 제공·야간 광고 2건을 자동으로 해제합니다
+          <p id="web-action-sub" class="text-[11px] text-center text-muted mt-2">
+            클릭 시 약관을 순차 스캔하여 위험 선택 항목 2건을 자동 차단합니다
           </p>
 
-          <!-- Compact Breakdown -->
-          <div class="mt-5 pt-4 border-t border-line space-y-2.5">
-            <div class="flex items-center justify-between text-[12px]">
-              <span class="text-sub font-medium">[필수] 이용약관 · 저작권 귀속</span>
-              <span class="font-semibold text-danger">주의 후 체크</span>
+          <!-- 2-Tier Pipeline Summary -->
+          <div class="mt-5 pt-4 border-t border-line grid grid-cols-2 gap-2.5 text-[11px]">
+            <div class="p-3 rounded-xl bg-[#FAFAFB] border border-line">
+              <div class="font-bold text-ink">System 1 · Decision</div>
+              <div class="text-sub mt-0.5">Jev / 5대 함정 초고속 판정</div>
             </div>
-            <div class="flex items-center justify-between text-[12px]">
-              <span class="text-sub font-medium">[필수] 개인정보 최소 수집</span>
-              <span class="font-semibold text-safe">체크 권장</span>
-            </div>
-            <div class="flex items-center justify-between text-[12px]">
-              <span class="text-sub font-medium">[선택] 14개 보험사 제3자 제공</span>
-              <span class="font-semibold text-muted">해제 권장</span>
-            </div>
-            <div class="flex items-center justify-between text-[12px]">
-              <span class="text-sub font-medium">[선택] 야간 광고 SMS 수신</span>
-              <span class="font-semibold text-muted">해제 권장</span>
+            <div class="p-3 rounded-xl bg-[#FAFAFB] border border-line">
+              <div class="font-bold text-ink">System 2 · 해설</div>
+              <div class="text-sub mt-0.5">위험 조항만 선별 요약</div>
             </div>
           </div>
         </div>
 
-        <!-- Vault Quick Card -->
-        <div class="card rounded-2xl px-5 py-4 flex items-center justify-between gap-3">
+        <!-- Vault Quick Bar -->
+        <div class="surface rounded-2xl px-5 py-4 flex items-center justify-between gap-3">
           <div>
-            <div class="text-[13px] font-bold text-ink">내 동의 보관함 (Vault)</div>
-            <div id="vault-status-summary" class="text-[12px] text-sub mt-0.5">현재 3개 서비스 이력이 기기에 안전하게 보관 중입니다.</div>
+            <div class="text-[13px] font-bold text-ink">내 동의 보관함 (Consent Vault)</div>
+            <div id="vault-status-summary" class="text-[12px] text-sub mt-0.5">3개 서비스 이력이 기기에 암호화 보관 중입니다.</div>
           </div>
-          <button onclick="switchDemoMode('mobile')" class="text-[12px] font-semibold text-brand hover:underline shrink-0">
-            관리하기
+          <button onclick="switchDemoMode('mobile')" class="px-3 py-1.5 rounded-lg bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[12px] font-semibold text-ink transition shrink-0">
+            열기
           </button>
         </div>
       </div>
     </section>
 
-    <!-- ================= MODE 2: Mobile OCR & Consent Vault ================= -->
-    <section id="view-mobile" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start fade-in">
+    <!-- ================= MODE 2: Custom Terms Analyzer (0-100 Score & 5 Traps) ================= -->
+    <section id="view-custom" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-7 items-start fade-up">
 
-      <!-- Left: Clean Light Mobile Device Frame -->
+      <!-- Left: Input -->
+      <div class="lg:col-span-6 surface rounded-[24px] p-6 sm:p-7">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-[18px] font-bold text-ink">약관 텍스트 정밀 진단</h3>
+          <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[#EFF6FF] text-brand">0~100점 스코어러</span>
+        </div>
+        <p class="text-[13px] text-sub mb-4">
+          계약서·약관을 붙여넣으면 5대 법률 함정 패턴과 공정위 표준약관 이탈 점수를 즉시 계산합니다.
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-3">
+          <button onclick="loadPreset('gym')" class="px-3 py-1.5 rounded-full bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[12px] font-semibold text-ink transition">
+            헬스장 환불 불가
+          </button>
+          <button onclick="loadPreset('ugc')" class="px-3 py-1.5 rounded-full bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[12px] font-semibold text-ink transition">
+            UGC 저작권 귀속
+          </button>
+          <button onclick="loadPreset('trap')" class="px-3 py-1.5 rounded-full bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[12px] font-semibold text-ink transition">
+            단서 역전 + 임의 해지
+          </button>
+          <button onclick="loadPreset('safe')" class="px-3 py-1.5 rounded-full bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[12px] font-semibold text-ink transition">
+            표준 SaaS 약관
+          </button>
+        </div>
+
+        <textarea id="custom-terms-input" rows="10" class="w-full bg-[#FAFAFB] border border-line rounded-2xl p-4 text-[13px] text-ink leading-relaxed focus:outline-none focus:border-brand focus:bg-white transition custom-scroll" placeholder="분석할 약관이나 계약서 조항을 입력하세요..."></textarea>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <span class="text-[12px] text-muted">PII 자동 마스킹 · 원문 무저장</span>
+          <button id="btn-run-analysis" onclick="runCustomAIAnalysis()" class="px-5 py-2.5 rounded-xl bg-brand hover:bg-brandHover text-white text-[13px] font-bold shadow-sm transition">
+            리스크 진단 시작
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Result with Score Gauge + 5 Trap Patterns -->
+      <div class="lg:col-span-6 surface rounded-[24px] p-6 sm:p-7 min-h-[440px] flex flex-col">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-line">
+          <h4 class="text-[16px] font-bold text-ink">진단 리포트</h4>
+          <div id="custom-risk-badge" class="px-2.5 py-1 rounded-full text-[12px] font-bold bg-[#F3F4F6] text-muted">
+            대기 중
+          </div>
+        </div>
+
+        <div id="custom-loading" class="hidden flex-1 flex flex-col items-center justify-center py-12 text-center">
+          <div class="w-8 h-8 border-2 border-line border-t-brand rounded-full animate-spin mb-3"></div>
+          <div class="text-[14px] font-bold text-ink">5대 법률 함정 패턴을 스캔 중입니다</div>
+          <p class="text-[12px] text-muted mt-1">System 1 Decision 스코어링 → System 2 해설 생성</p>
+        </div>
+
+        <div id="custom-empty" class="flex-1 flex flex-col items-center justify-center py-12 text-center text-muted">
+          <p class="text-[13px] leading-relaxed">
+            좌측에서 예시 약관을 선택하거나 텍스트를 붙여넣고<br />
+            <strong class="text-ink">리스크 진단 시작</strong>을 눌러 주세요.
+          </p>
+        </div>
+
+        <div id="custom-result" class="hidden flex-1 flex flex-col justify-between space-y-4">
+          <div class="space-y-4">
+            <!-- Score & Traps Row -->
+            <div class="p-4 rounded-2xl bg-[#FAFAFB] border border-line flex items-center gap-4">
+              <div class="relative w-16 h-16 shrink-0">
+                <svg class="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="26" fill="none" stroke="#E5E7EB" stroke-width="6" />
+                  <circle id="custom-gauge-circle" class="gauge-ring" cx="32" cy="32" r="26" fill="none" stroke="#EF4444" stroke-width="6" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span id="custom-gauge-score" class="text-[16px] font-extrabold text-ink">0</span>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-[11px] font-bold text-muted mb-1">핵심 요약</div>
+                <p id="custom-summary-text" class="text-[13px] font-semibold text-ink leading-snug"></p>
+              </div>
+            </div>
+
+            <!-- Detected Traps -->
+            <div id="custom-traps-section" class="hidden">
+              <div class="text-[11px] font-bold text-muted uppercase tracking-wider mb-2">감지된 5대 법률 함정</div>
+              <div id="custom-traps-container" class="flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <!-- Items -->
+            <div id="custom-items-container" class="space-y-2.5"></div>
+
+            <!-- Dark Patterns -->
+            <div id="custom-darkpattern-section" class="hidden">
+              <div class="text-[11px] font-bold text-danger uppercase tracking-wider mb-1.5">다크패턴 경고</div>
+              <div id="custom-darkpattern-container" class="space-y-2"></div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-line text-[11px] text-muted flex justify-between">
+            <span id="custom-engine-label">Zero-Retention Stateless 분석</span>
+            <span>공정위 표준약관 기준 (법률 자문 아님)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MODE 3: Mobile OCR & Consent Vault ================= -->
+    <section id="view-mobile" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-7 items-start fade-up">
+
+      <!-- Left: Mobile Mockup -->
       <div class="lg:col-span-5 flex justify-center">
-        <div class="w-[330px] bg-[#191F28] rounded-[40px] p-2.5 shadow-xl">
-          <div class="bg-[#F7F8FA] rounded-[32px] overflow-hidden h-[580px] flex flex-col justify-between">
+        <div class="w-[330px] bg-ink rounded-[42px] p-2.5 shadow-2xl">
+          <div class="bg-[#FAFAFB] rounded-[34px] overflow-hidden h-[585px] flex flex-col justify-between">
             <div class="p-4">
-              <!-- Status Bar -->
-              <div class="w-20 h-4 bg-[#191F28] rounded-full mx-auto mb-4"></div>
-
+              <div class="w-20 h-4 bg-ink rounded-full mx-auto mb-4"></div>
               <div class="flex items-center justify-between mb-3">
-                <span class="text-[13px] font-bold text-ink">모바일 앱 캡처 분석</span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white border border-line text-sub">온디바이스 OCR</span>
+                <span class="text-[13px] font-bold text-ink">모바일 캡처 가이드</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-safeSoft text-safe">온디바이스 OCR</span>
               </div>
 
-              <!-- Capture Trigger -->
               <div class="bg-white border border-line rounded-2xl p-4 text-center mb-3">
-                <div class="w-9 h-9 rounded-xl bg-[#EBF3FE] text-brand mx-auto flex items-center justify-center mb-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                    <polyline points="16 6 12 2 8 6"/>
-                    <line x1="12" y1="2" x2="12" y2="15"/>
-                  </svg>
-                </div>
-                <div class="text-[13px] font-bold text-ink">스크린샷 공유 시트 연동</div>
+                <div class="text-[13px] font-bold text-ink">네이티브 앱 스크린샷 공유</div>
                 <p class="text-[11px] text-sub mt-1 leading-snug">
-                  배달·금융 앱 가입 화면을 캡처해 공유하면 이미지를 서버에 보내지 않고 기기에서 바로 진단합니다.
+                  이미지는 서버에 보내지 않고 기기에서 OCR + PII 마스킹 후 체크 가이드를 표시합니다.
                 </p>
-                <button onclick="simulateMobileOCR()" class="mt-3 w-full py-2 rounded-xl bg-brand hover:bg-brandHover text-white text-[12px] font-semibold transition">
+                <button onclick="simulateMobileOCR()" class="mt-3 w-full py-2.5 rounded-xl bg-brand hover:bg-brandHover text-white text-[12px] font-bold transition">
                   배달앱 캡처 진단 시뮬레이션
                 </button>
               </div>
 
-              <!-- Bottom Sheet Result -->
               <div id="mobile-ocr-result" class="bg-white border border-line rounded-2xl p-3.5 space-y-2.5">
                 <div class="flex items-center justify-between">
                   <span class="text-[12px] font-bold text-ink">배달의상상 신규 가입</span>
-                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-warnSoft text-warn">주의</span>
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-warnSoft text-warn">주의 · 58점</span>
                 </div>
-                <p class="text-[11px] text-sub leading-relaxed">
-                  선택 항목 2건이 포함되어 있습니다. 아래 가이드대로 체크해 주세요.
-                </p>
-                <div class="space-y-1.5 pt-1 text-[11px]">
-                  <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-[#F9FAFB]">
-                    <span class="text-ink font-medium">[필수] 배달 위치·연락처 확인</span>
+                <div class="space-y-1.5 text-[11px]">
+                  <div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-[#FAFAFB]">
+                    <span class="text-ink font-medium">[필수] 배달 위치·연락처</span>
                     <span class="text-safe font-bold">체크</span>
                   </div>
-                  <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-dangerSoft/60">
+                  <div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-dangerSoft/70">
                     <span class="text-ink font-medium">[선택] 제휴사 야간 쿠폰 푸시</span>
                     <span class="text-danger font-bold">해제 권장</span>
                   </div>
@@ -442,8 +520,8 @@
             </div>
 
             <div class="p-4 bg-white border-t border-line">
-              <button onclick="showRevokeModal('배달의상상')" class="w-full py-2.5 rounded-xl bg-[#F2F4F6] hover:bg-[#E5E8EB] text-ink text-[12px] font-semibold transition">
-                이 서비스 동의 철회서 작성
+              <button onclick="showRevokeModal('배달의상상')" class="w-full py-2.5 rounded-xl bg-[#F3F4F6] hover:bg-[#E5E7EB] text-ink text-[12px] font-bold transition">
+                이 서비스 제37조 철회서 작성
               </button>
             </div>
           </div>
@@ -452,27 +530,25 @@
 
       <!-- Right: Vault & Revocation -->
       <div class="lg:col-span-7 space-y-5">
-        <!-- Vault List -->
-        <div class="card rounded-2xl p-6">
+        <div class="surface rounded-[24px] p-6">
           <div class="flex items-center justify-between mb-4">
             <div>
               <h3 class="text-[17px] font-bold text-ink">내 동의 보관함 (Consent Vault)</h3>
-              <p class="text-[12px] text-sub mt-0.5">외부 서버가 아닌 내 기기(IndexedDB)에만 암호화 저장됩니다.</p>
+              <p class="text-[12px] text-sub mt-0.5">외부 서버 없이 내 기기(IndexedDB)에만 보관됩니다.</p>
             </div>
-            <button onclick="clearAllVault()" class="text-[12px] font-medium text-muted hover:text-danger transition">
+            <button onclick="clearAllVault()" class="text-[12px] font-semibold text-muted hover:text-danger transition">
               전체 삭제
             </button>
           </div>
           <div id="vault-list-container" class="space-y-2.5"></div>
         </div>
 
-        <!-- Article 37 Revocation Template -->
-        <div class="card rounded-2xl p-6">
+        <div class="surface rounded-[24px] p-6">
           <div class="flex items-center justify-between mb-3">
             <h4 class="text-[15px] font-bold text-ink">개인정보보호법 제37조 동의 철회 요청서</h4>
-            <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-safeSoft text-safe">법정 처리정지 요구권</span>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-safeSoft text-safe">처리정지 요구권</span>
           </div>
-          <pre id="revoke-preview-box" class="bg-[#F9FAFB] border border-line rounded-xl p-4 text-[12px] text-sub font-sans whitespace-pre-wrap leading-relaxed max-h-52 overflow-y-auto custom-scroll">수신: 주식회사 넥서스클럽 개인정보보호책임자
+          <pre id="revoke-preview-box" class="bg-[#FAFAFB] border border-line rounded-2xl p-4 text-[12px] text-sub font-sans whitespace-pre-wrap leading-relaxed max-h-52 overflow-y-auto custom-scroll">수신: 주식회사 넥서스클럽 개인정보보호책임자
 참조: 고객만족센터
 
 제목: [개인정보보호법 제37조] 개인정보 제3자 제공 및 마케팅 동의 철회 요청
@@ -486,115 +562,31 @@
 
 본 요청 수신 후 지체 없이(10일 이내) 조치 결과를 회신하여 주시기 바랍니다.</pre>
           <div class="mt-3.5 flex justify-end">
-            <button onclick="copyRevokeEmail()" class="px-4 py-2 rounded-xl bg-brand hover:bg-brandHover text-white text-[13px] font-semibold transition">
+            <button onclick="copyRevokeEmail()" class="px-4 py-2 rounded-xl bg-brand hover:bg-brandHover text-white text-[13px] font-bold transition">
               <span id="copy-btn-text">요청서 복사하기</span>
             </button>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- ================= MODE 3: Custom Terms Analyzer ================= -->
-    <section id="view-custom" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start fade-in">
-
-      <!-- Input -->
-      <div class="lg:col-span-6 card rounded-2xl p-6">
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-[17px] font-bold text-ink">약관 텍스트 직접 진단</h3>
-          <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-[#F2F4F6] text-sub">공정위 표준약관 기준</span>
-        </div>
-        <p class="text-[13px] text-sub mb-4">
-          계약서나 웹사이트 약관을 붙여넣으면 독소 조항과 다크패턴을 쉬운 한국어로 정리해 드립니다.
-        </p>
-
-        <!-- Presets -->
-        <div class="flex flex-wrap gap-2 mb-3">
-          <button onclick="loadPreset('gym')" class="px-3 py-1.5 rounded-lg bg-[#F2F4F6] hover:bg-[#E5E8EB] text-[12px] font-semibold text-ink transition">
-            헬스장 환불 불가
-          </button>
-          <button onclick="loadPreset('ugc')" class="px-3 py-1.5 rounded-lg bg-[#F2F4F6] hover:bg-[#E5E8EB] text-[12px] font-semibold text-ink transition">
-            UGC 저작권 귀속
-          </button>
-          <button onclick="loadPreset('safe')" class="px-3 py-1.5 rounded-lg bg-[#F2F4F6] hover:bg-[#E5E8EB] text-[12px] font-semibold text-ink transition">
-            표준 SaaS 약관
-          </button>
-        </div>
-
-        <textarea id="custom-terms-input" rows="11" class="w-full bg-[#F9FAFB] border border-line rounded-xl p-4 text-[13px] text-ink leading-relaxed focus:outline-none focus:border-brand focus:bg-white transition custom-scroll" placeholder="분석할 약관이나 동의서 텍스트를 붙여넣어 주세요..."></textarea>
-
-        <div class="mt-4 flex items-center justify-between gap-3">
-          <span class="text-[12px] text-muted">로컬 백엔드(localhost:8000) 우선 연동</span>
-          <button id="btn-run-analysis" onclick="runCustomAIAnalysis()" class="px-5 py-2.5 rounded-xl bg-brand hover:bg-brandHover text-white text-[13px] font-bold transition">
-            리스크 진단 시작
-          </button>
-        </div>
-      </div>
-
-      <!-- Result -->
-      <div class="lg:col-span-6 card rounded-2xl p-6 min-h-[430px] flex flex-col">
-        <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-line">
-          <h4 class="text-[15px] font-bold text-ink">진단 결과</h4>
-          <div id="custom-risk-badge" class="px-2.5 py-1 rounded-full text-[12px] font-bold bg-[#F2F4F6] text-muted">
-            대기 중
-          </div>
-        </div>
-
-        <div id="custom-loading" class="hidden flex-1 flex flex-col items-center justify-center py-12 text-center">
-          <div class="w-8 h-8 border-2 border-[#E5E8EB] border-t-brand rounded-full animate-spin mb-3"></div>
-          <div class="text-[14px] font-semibold text-ink">약관 조항을 대조하고 있습니다</div>
-          <p class="text-[12px] text-muted mt-1">공정거래위원회 표준약관 및 다크패턴 기준 분석 중</p>
-        </div>
-
-        <div id="custom-empty" class="flex-1 flex flex-col items-center justify-center py-12 text-center text-muted">
-          <p class="text-[13px] leading-relaxed">
-            좌측에서 예시 약관을 선택하거나 텍스트를 입력한 뒤<br />
-            <strong class="text-sub">리스크 진단 시작</strong>을 눌러 주세요.
-          </p>
-        </div>
-
-        <div id="custom-result" class="hidden flex-1 flex flex-col justify-between">
-          <div class="space-y-4">
-            <div class="p-4 rounded-xl bg-[#F9FAFB] border border-line">
-              <div class="text-[11px] font-semibold text-muted mb-1">핵심 요약</div>
-              <p id="custom-summary-text" class="text-[13px] font-medium text-ink leading-relaxed"></p>
-            </div>
-
-            <div>
-              <div class="text-[12px] font-bold text-sub mb-2">세부 조항 진단</div>
-              <div id="custom-items-container" class="space-y-2.5"></div>
-            </div>
-
-            <div id="custom-darkpattern-section" class="hidden">
-              <div class="text-[12px] font-bold text-danger mb-2">감지된 다크패턴</div>
-              <div id="custom-darkpattern-container" class="space-y-2"></div>
-            </div>
-          </div>
-
-          <div class="mt-5 pt-3 border-t border-line text-[11px] text-muted flex justify-between">
-            <span id="custom-engine-label">Zero-Retention Stateless 분석</span>
-            <span>정보 제공 목적 (법률 자문 아님)</span>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- Footer Disclaimer -->
-  <footer class="border-t border-line bg-white">
+  <!-- Footer -->
+  <footer class="border-t border-black/[0.06] bg-white/70">
     <div class="max-w-6xl mx-auto px-5 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] text-muted">
       <span>본 서비스는 공정거래위원회 표준약관 기준에 따른 텍스트 비교·요약 도구이며, 법률 자문을 대신하지 않습니다.</span>
-      <span>© ConsentGuard AI</span>
+      <span class="font-medium">© ConsentGuard AI</span>
     </div>
   </footer>
 
   <!-- Clause Detail Modal -->
-  <div id="clause-modal" class="hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-[2px] flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-line">
+  <div id="clause-modal" class="hidden fixed inset-0 z-50 bg-ink/40 backdrop-blur-[3px] flex items-center justify-center p-4">
+    <div class="bg-white rounded-[24px] max-w-lg w-full p-6 shadow-2xl border border-line">
       <div class="flex items-center justify-between pb-3 mb-4 border-b border-line">
         <h4 id="modal-title" class="font-bold text-ink text-[15px]">약관 상세 보기</h4>
-        <button onclick="closeClauseModal()" class="w-8 h-8 rounded-lg hover:bg-[#F2F4F6] text-sub flex items-center justify-center">✕</button>
+        <button onclick="closeClauseModal()" class="w-8 h-8 rounded-full hover:bg-[#F3F4F6] text-sub flex items-center justify-center">✕</button>
       </div>
-      <pre id="modal-content" class="text-[13px] text-sub leading-relaxed bg-[#F9FAFB] p-4 rounded-xl border border-line font-sans whitespace-pre-wrap mb-5 max-h-64 overflow-y-auto custom-scroll"></pre>
+      <pre id="modal-content" class="text-[13px] text-sub leading-relaxed bg-[#FAFAFB] p-4 rounded-2xl border border-line font-sans whitespace-pre-wrap mb-5 max-h-64 overflow-y-auto custom-scroll"></pre>
       <div class="flex justify-end">
         <button onclick="closeClauseModal()" class="px-4 py-2 rounded-xl bg-ink text-white text-[13px] font-semibold">확인</button>
       </div>
@@ -602,14 +594,25 @@
   </div>
 
   <!-- Toast -->
-  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 translate-y-12 opacity-0 pointer-events-none transition-all duration-200 bg-ink text-white text-[13px] font-medium px-5 py-3 rounded-full shadow-lg flex items-center gap-2">
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 translate-y-12 opacity-0 pointer-events-none transition-all duration-200 bg-ink text-white text-[13px] font-semibold px-5 py-3 rounded-full shadow-xl flex items-center gap-2">
     <span id="toast-dot" class="w-2 h-2 rounded-full bg-safe"></span>
-    <span id="toast-msg">알림 메시지</span>
+    <span id="toast-msg">알림</span>
   </div>
 
   <script>
+    const API_BASE = 'http://127.0.0.1:8000';
+
+    const TRAP_LABELS = {
+      EXCEPTION_REVERSAL: '단서 역전 함정',
+      SILENCE_CONSENT: '침묵·간주 동의',
+      UNILATERAL_DISCRETION: '일방적 재량권',
+      ASYMMETRIC_LIABILITY: '권리·책임 비대칭',
+      THRESHOLD_DEVIATION: '수치 기준 이탈',
+    };
+
     const state = {
       activeTab: 'web',
+      isScanning: false,
       vaultItems: [
         {
           id: 'v_1',
@@ -646,28 +649,26 @@
         title: '[필수] 서비스 이용약관 및 저작권 귀속 동의',
         content: `제14조(회사의 면책 및 게시물의 권리)
 1. 회사는 천재지변, 기간통신사업자의 회선 장애 또는 이에 준하는 시스템 오류로 인한 회원의 손해에 대해 일체의 책임을 부담하지 않습니다.
-2. 회원이 서비스 내에 게시한 모든 콘텐츠(사진, 리뷰, 게시글 등)의 저작재산권(복제권, 공중송신권, 2차적저작물작성권 포함)은 게시 시점에 회사에 영구히 귀속되며, 회사는 이를 상업적 프로모션에 무상으로 활용할 수 있습니다.`
+2. 회원이 서비스 내에 게시한 모든 콘텐츠(사진, 리뷰, 게시글 등)의 저작재산권은 게시 시점에 회사에 영구히 귀속되며, 회사는 이를 상업적 프로모션에 무상으로 활용할 수 있습니다.`
       },
       2: {
         title: '[필수] 개인정보 수집 및 이용 동의',
         content: `제1조(수집 항목 및 목적)
 1. 수집 항목: 이름, 이메일, 암호화된 비밀번호, 결제 정보
-2. 수집 목적: 회원 가입 식별, 결제 승인 및 주문 내역 안내
-3. 보유 및 이용 기간: 회원 탈퇴 시 지체 없이 파기 (단, 관계 법령에 따라 5년간 보존되는 결제 기록 제외)`
+2. 보유 및 이용 기간: 회원 탈퇴 시 지체 없이 파기 (단, 관계 법령 보존 기록 제외)`
       },
       3: {
         title: '[선택] 제휴 금융·보험 14개사 개인정보 제3자 제공 동의',
         content: `제1조(제3자 제공 내역)
 1. 제공받는 자: (주)○○생명, (주)△△화재, (주)□□카드 등 14개 제휴 금융기관
 2. 제공 목적: 맞춤형 보험 상품 추천, 대출 및 금융 상품 전화 상담(TM)
-3. 제공 항목: 이름, 생년월일, 휴대전화번호, 가입일시
-4. 보유 및 이용 기간: 제공 동의일로부터 3년`
+3. 보유 및 이용 기간: 제공 동의일로부터 3년`
       },
       4: {
         title: '[선택] 야간 광고성 SMS 및 앱 푸시 수신 동의',
         content: `제1조(광고성 정보의 수신)
-1. 이용자는 당사가 제공하는 할인 쿠폰, 특가 상품, 제휴사 프로모션 안내를 SMS, MMS, 앱 푸시로 수신하는 것에 동의합니다.
-2. 본 동의에는 야간 시간대(20:00~08:00) 발송되는 광고 수신 동의가 포함되어 있습니다.`
+1. 당사가 제공하는 할인 쿠폰, 특가 상품 안내를 SMS, 앱 푸시로 수신합니다.
+2. 야간 시간대(20:00~08:00) 발송 광고 수신 동의가 포함되어 있습니다.`
       }
     };
 
@@ -679,15 +680,43 @@
         .replace(/"/g, '&quot;');
     }
 
+    function updateGauge(circleId, scoreId, score, radius) {
+      const circle = document.getElementById(circleId);
+      const scoreEl = document.getElementById(scoreId);
+      if (!circle || !scoreEl) return;
+
+      const clamped = Math.max(0, Math.min(100, Math.round(score)));
+      const circumference = 2 * Math.PI * radius;
+      circle.style.strokeDasharray = String(circumference);
+      circle.style.strokeDashoffset = String(circumference * (1 - clamped / 100));
+      circle.style.stroke = clamped >= 70 ? '#EF4444' : clamped >= 40 ? '#D97706' : '#059669';
+      scoreEl.textContent = String(clamped);
+    }
+
+    async function checkBackendHealth() {
+      const dot = document.getElementById('live-api-dot');
+      const text = document.getElementById('live-api-text');
+      try {
+        const res = await fetch(`${API_BASE}/health`);
+        if (res.ok) {
+          const data = await res.json();
+          dot.className = 'w-1.5 h-1.5 rounded-full bg-safe';
+          text.textContent = `로컬 엔진 연결됨 (${data.llm_provider || 'rule'})`;
+          return;
+        }
+      } catch {}
+      dot.className = 'w-1.5 h-1.5 rounded-full bg-warn';
+      text.textContent = '브라우저 로컬 모드';
+    }
+
     function switchDemoMode(mode) {
       state.activeTab = mode;
-      ['web', 'mobile', 'custom'].forEach(v => {
+      ['web', 'custom', 'mobile'].forEach(v => {
         document.getElementById(`view-${v}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-${v}`);
-        btn.className = 'tab-btn tab-inactive px-3.5 py-1.5 rounded-lg';
+        document.getElementById(`tab-${v}`).className = 'pill-tab pill-inactive px-4 py-2 rounded-full text-[13px] font-semibold';
       });
       document.getElementById(`view-${mode}`).classList.remove('hidden');
-      document.getElementById(`tab-${mode}`).className = 'tab-btn tab-active px-3.5 py-1.5 rounded-lg';
+      document.getElementById(`tab-${mode}`).className = 'pill-tab pill-active px-4 py-2 rounded-full text-[13px] font-semibold';
       if (mode === 'mobile') renderVaultList();
     }
 
@@ -702,30 +731,85 @@
       document.getElementById('chk-all').checked = all;
     }
 
-    function applySafeSelection() {
-      document.getElementById('chk-1').checked = true;
-      document.getElementById('chk-2').checked = true;
-      document.getElementById('chk-3').checked = false;
-      document.getElementById('chk-4').checked = false;
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    async function applySafeSelectionAnimated() {
+      if (state.isScanning) return;
+      state.isScanning = true;
+
+      const btn = document.getElementById('btn-safe-apply');
+      const label = document.getElementById('btn-safe-label');
+      btn.disabled = true;
+      label.textContent = '약관 4건 순차 스캔 중...';
+
       document.getElementById('chk-all').checked = false;
 
-      document.getElementById('item-row-1').classList.add('bg-[#F9FAFB]', 'border-line');
-      document.getElementById('item-row-2').classList.add('bg-[#F9FAFB]', 'border-line');
-      document.getElementById('item-row-3').classList.add('opacity-50');
-      document.getElementById('item-row-4').classList.add('opacity-50');
+      const steps = [
+        { row: 'item-row-1', chk: 'chk-1', checked: true, badge: 'badge-row-1', text: '주의 체크 완료', cls: 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-warnSoft text-warn', dim: false },
+        { row: 'item-row-2', chk: 'chk-2', checked: true, badge: 'badge-row-2', text: '안전 체크 완료', cls: 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-safeSoft text-safe', dim: false },
+        { row: 'item-row-3', chk: 'chk-3', checked: false, badge: 'badge-row-3', title: 'title-row-3', text: '자동 차단됨', cls: 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-safeSoft text-safe', dim: true },
+        { row: 'item-row-4', chk: 'chk-4', checked: false, badge: 'badge-row-4', title: 'title-row-4', text: '자동 차단됨', cls: 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-safeSoft text-safe', dim: true },
+      ];
 
-      const b3 = document.getElementById('badge-row-3');
-      const b4 = document.getElementById('badge-row-4');
-      if (b3) {
-        b3.className = 'text-[11px] font-semibold px-1.5 py-0.5 rounded bg-safeSoft text-safe';
-        b3.textContent = '차단 완료';
-      }
-      if (b4) {
-        b4.className = 'text-[11px] font-semibold px-1.5 py-0.5 rounded bg-safeSoft text-safe';
-        b4.textContent = '차단 완료';
+      for (const s of steps) {
+        const rowEl = document.getElementById(s.row);
+        rowEl.classList.add('row-scanning');
+        await sleep(190);
+        document.getElementById(s.chk).checked = s.checked;
+        const badgeEl = document.getElementById(s.badge);
+        badgeEl.className = s.cls;
+        badgeEl.textContent = s.text;
+        rowEl.classList.remove('row-scanning');
+        if (s.dim) {
+          rowEl.classList.add('opacity-55', 'bg-[#FAFAFB]');
+          if (s.title) document.getElementById(s.title).classList.add('line-through', 'text-muted');
+        }
       }
 
-      showToast('필수 2건만 체크하고 제3자 제공·야간 광고 2건을 해제했습니다.');
+      // Drop risk gauge dynamically from 84 -> 34
+      updateGauge('web-gauge-circle', 'web-gauge-score', 34, 33);
+      const pill = document.getElementById('web-risk-pill');
+      pill.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-safeSoft text-safe';
+      pill.textContent = '방어 완료 · SAFE';
+      document.getElementById('web-risk-headline').textContent = '불필요한 위험 동의 2건을 차단했습니다';
+      label.textContent = '안전 동의 적용 완료';
+      btn.disabled = false;
+      state.isScanning = false;
+      showToast('필수 2건만 체크하고 제3자 제공·야간 광고 2건을 자동 차단했습니다.');
+    }
+
+    function resetWebDemo() {
+      document.getElementById('chk-all').checked = false;
+      document.getElementById('chk-1').checked = false;
+      document.getElementById('chk-2').checked = false;
+      document.getElementById('chk-3').checked = true;
+      document.getElementById('chk-4').checked = true;
+
+      ['item-row-3', 'item-row-4'].forEach(id => {
+        document.getElementById(id).classList.remove('opacity-55', 'bg-[#FAFAFB]');
+      });
+      ['title-row-3', 'title-row-4'].forEach(id => {
+        document.getElementById(id).classList.remove('line-through', 'text-muted');
+      });
+
+      document.getElementById('badge-row-1').className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-dangerSoft text-danger';
+      document.getElementById('badge-row-1').textContent = '권리 비대칭';
+      document.getElementById('badge-row-2').className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-safeSoft text-safe';
+      document.getElementById('badge-row-2').textContent = '표준 부합';
+      document.getElementById('badge-row-3').className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-dangerSoft text-danger';
+      document.getElementById('badge-row-3').textContent = '사전체크 · 수치 이탈';
+      document.getElementById('badge-row-4').className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-warnSoft text-warn';
+      document.getElementById('badge-row-4').textContent = '사전체크 · 해제 권장';
+
+      updateGauge('web-gauge-circle', 'web-gauge-score', 84, 33);
+      const pill = document.getElementById('web-risk-pill');
+      pill.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-dangerSoft text-danger';
+      pill.textContent = '위험 · RED';
+      document.getElementById('web-risk-headline').textContent = '법률 함정 3건이 감지되었습니다';
+      document.getElementById('btn-safe-label').textContent = '필수만 안전하게 동의하기';
+      showToast('데모를 초기 상태로 되돌렸습니다.');
     }
 
     function showClauseDetail(id) {
@@ -747,7 +831,6 @@
         showToast('필수 약관 2건에 동의해야 가입할 수 있습니다.', 'warning');
         return;
       }
-
       const chk3 = document.getElementById('chk-3').checked;
       const chk4 = document.getElementById('chk-4').checked;
 
@@ -761,33 +844,25 @@
         rejectedOptional: [!chk3 ? '제3자 제공 차단' : null, !chk4 ? '야간 광고 차단' : null].filter(Boolean)
       });
 
-      const summary = document.getElementById('vault-status-summary');
-      if (summary) {
-        summary.textContent = `현재 ${state.vaultItems.length}개 서비스 이력이 기기에 안전하게 보관 중입니다.`;
-      }
+      document.getElementById('vault-status-summary').textContent = `${state.vaultItems.length}개 서비스 이력이 기기에 암호화 보관 중입니다.`;
       renderVaultList();
-      showToast('가입 완료 · 동의 이력이 내 기기 보관함에 저장되었습니다.');
+      showToast('가입 완료 · 동의 이력이 내 기기 보관함에 기록되었습니다.');
     }
 
     function renderVaultList() {
       const container = document.getElementById('vault-list-container');
       if (!container) return;
-
       if (state.vaultItems.length === 0) {
         container.innerHTML = `<div class="py-10 text-center text-[13px] text-muted">보관된 동의 이력이 없습니다.</div>`;
         return;
       }
-
       container.innerHTML = state.vaultItems.map(item => {
         const pillClass =
           item.riskLevel === 'RED' ? 'bg-dangerSoft text-danger' :
-          item.riskLevel === 'YELLOW' ? 'bg-warnSoft text-warn' :
-          'bg-safeSoft text-safe';
-        const pillLabel =
-          item.riskLevel === 'RED' ? '위험' : item.riskLevel === 'YELLOW' ? '주의' : '안전';
-
+          item.riskLevel === 'YELLOW' ? 'bg-warnSoft text-warn' : 'bg-safeSoft text-safe';
+        const pillLabel = item.riskLevel === 'RED' ? '위험' : item.riskLevel === 'YELLOW' ? '주의' : '안전';
         return `
-          <div class="p-4 rounded-xl bg-[#F9FAFB] border border-line flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="p-4 rounded-2xl bg-[#FAFAFB] border border-line flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2 mb-1">
                 <span class="font-bold text-[14px] text-ink">${escapeHtml(item.name)}</span>
@@ -795,15 +870,15 @@
                 <span class="text-[11px] text-muted">${escapeHtml(item.date)}</span>
               </div>
               <div class="text-[12px] text-sub">
-                동의: ${item.consentedOptional.length > 0 ? escapeHtml(item.consentedOptional.join(', ')) : '필수 항목만 동의'}
-                ${item.rejectedOptional.length > 0 ? ` · <span class="text-safe font-medium">${escapeHtml(item.rejectedOptional.join(', '))}</span>` : ''}
+                동의: ${item.consentedOptional.length > 0 ? escapeHtml(item.consentedOptional.join(', ')) : '필수만 동의'}
+                ${item.rejectedOptional.length > 0 ? ` · <span class="text-safe font-semibold">${escapeHtml(item.rejectedOptional.join(', '))}</span>` : ''}
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <button onclick="showRevokeModal('${escapeHtml(item.name)}')" class="px-3 py-1.5 rounded-lg bg-white border border-line hover:bg-[#F2F4F6] text-[12px] font-semibold text-ink transition">
+              <button onclick="showRevokeModal('${escapeHtml(item.name)}')" class="px-3 py-1.5 rounded-xl bg-white border border-line hover:bg-[#F3F4F6] text-[12px] font-semibold text-ink transition">
                 철회서 생성
               </button>
-              <button onclick="removeVaultItem('${escapeHtml(item.id)}')" class="px-2.5 py-1.5 rounded-lg text-[12px] text-muted hover:text-danger transition">
+              <button onclick="removeVaultItem('${escapeHtml(item.id)}')" class="px-2.5 py-1.5 text-[12px] text-muted hover:text-danger transition">
                 삭제
               </button>
             </div>
@@ -815,7 +890,7 @@
     function removeVaultItem(id) {
       state.vaultItems = state.vaultItems.filter(i => i.id !== id);
       renderVaultList();
-      showToast('보관함에서 삭제되었습니다.');
+      showToast('보관함에서 삭제했습니다.');
     }
 
     function clearAllVault() {
@@ -842,30 +917,26 @@
 
 요청일자: ${new Date().toISOString().split('T')[0]}
 정보주체: 이용자 본인`;
-
-      const previewBox = document.getElementById('revoke-preview-box');
-      if (previewBox) previewBox.textContent = template;
+      document.getElementById('revoke-preview-box').textContent = template;
       showToast(`'${serviceName}' 제37조 철회 요청서가 생성되었습니다.`);
     }
 
     async function copyRevokeEmail() {
       const text = document.getElementById('revoke-preview-box').textContent;
       try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
+        if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(text);
         } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = text;
-          document.body.appendChild(textarea);
-          textarea.select();
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
           document.execCommand('copy');
-          document.body.removeChild(textarea);
+          document.body.removeChild(ta);
         }
         document.getElementById('copy-btn-text').textContent = '복사 완료';
-        showToast('동의 철회 요청서가 클립보드에 복사되었습니다.');
-        setTimeout(() => {
-          document.getElementById('copy-btn-text').textContent = '요청서 복사하기';
-        }, 2000);
+        showToast('요청서가 클립보드에 복사되었습니다.');
+        setTimeout(() => { document.getElementById('copy-btn-text').textContent = '요청서 복사하기'; }, 2000);
       } catch {
         showToast('복사에 실패했습니다.', 'warning');
       }
@@ -873,56 +944,48 @@
 
     function simulateMobileOCR() {
       const resultBox = document.getElementById('mobile-ocr-result');
-      resultBox.innerHTML = `
-        <div class="py-5 text-center text-[12px] text-sub">
-          <div class="w-5 h-5 border-2 border-line border-t-brand rounded-full animate-spin mx-auto mb-2"></div>
-          온디바이스 OCR 텍스트 추출 및 진단 중...
-        </div>
-      `;
+      resultBox.innerHTML = `<div class="py-6 text-center text-[12px] text-sub"><div class="w-5 h-5 border-2 border-line border-t-brand rounded-full animate-spin mx-auto mb-2"></div>온디바이스 OCR + Jev 좌표 추출 중...</div>`;
       setTimeout(() => {
         resultBox.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-[12px] font-bold text-ink">배달앱 회원가입 캡처</span>
-            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-dangerSoft text-danger">위험</span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-dangerSoft text-danger">위험 · 82점</span>
           </div>
-          <p class="text-[11px] text-sub leading-relaxed">
-            총 3개 항목 중 제3자 제공 1건과 야간 광고 1건이 감지되었습니다.
-          </p>
-          <div class="space-y-1.5 pt-1 text-[11px]">
-            <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-[#F9FAFB]">
+          <div class="space-y-1.5 text-[11px]">
+            <div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-[#FAFAFB]">
               <span class="text-ink font-medium">[필수] 배달 위치·연락처</span>
               <span class="text-safe font-bold">체크</span>
             </div>
-            <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-dangerSoft/60">
+            <div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-dangerSoft/70">
               <span class="text-ink font-medium">[선택] 제휴 금융사 제공</span>
               <span class="text-danger font-bold">해제 권장</span>
             </div>
-            <div class="flex items-center justify-between py-1.5 px-2.5 rounded-lg bg-warnSoft/70">
+            <div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-warnSoft/70">
               <span class="text-ink font-medium">[선택] 야간 쿠폰 알림</span>
               <span class="text-warn font-bold">해제 권장</span>
             </div>
           </div>
         `;
-        showToast('모바일 스크린샷 온디바이스 OCR 진단이 완료되었습니다.');
-      }, 750);
+        showToast('모바일 스크린샷 온디바이스 OCR 진단 완료!');
+      }, 700);
     }
 
     const presets = {
       gym: `제5조(이용요금 및 환불 규정)
 1. 본 피트니스 센터의 12개월 정기 회원권은 특가 이벤트 상품으로, 결제 후 7일 이내라도 어떠한 사유로도 계약 취소 및 환불이 일체 불가합니다.
-2. 부상 또는 이사 등 불가피한 사유로 중도 해지 시, 정상가(월 200,000원) 기준으로 이용 일수를 일할 계산하고 위약금 30%를 공제한 후 잔액이 있을 경우에만 포인트로 반환합니다.
-3. 센터 내 기구 파손 및 안전사고 발생 시 이용자의 부주의로 간주하여 센터는 책임을 면합니다.`,
+2. 중도 해지 시 위약금 30%를 공제한 후 잔액만 포인트로 반환합니다.
+3. 센터 내 안전사고 발생 시 회사는 일체의 책임을 부담하지 않습니다.`,
       ugc: `제18조(회원의 저작물에 대한 권리)
-1. 회원이 서비스 내 게시판, SNS 연동 채널에 업로드한 모든 사진, 동영상, 텍스트, 음원 등의 지식재산권은 등록 즉시 회사에 영구히 양도되며, 회사는 이를 국내외 마케팅, 2차적 저작물 제작, 유료 판매 등에 무상으로 활용할 수 있습니다.
-2. 회원은 자신이 등록한 게시물에 대해 회사 및 제3자를 상대로 저작인격권을 행사하지 않는 것에 동의합니다.
-3. 탈퇴 후에도 기 등록된 게시물은 삭제되지 않으며 영구 보관됩니다.`,
+1. 회원이 업로드한 모든 사진, 동영상, 게시글의 저작재산권은 등록 즉시 회사에 영구히 양도되며 상업적 마케팅에 무상 활용됩니다.
+2. 탈퇴 후에도 기 등록된 게시물은 삭제되지 않으며 영구 보관됩니다.`,
+      trap: `제9조(청약철회 및 서비스 변경)
+1. 회원은 결제 후 7일 이내 청약철회가 가능합니다. 다만, 프로모션·할인 상품은 어떠한 경우에도 환불이 제외됩니다.
+2. 30일 무료 체험 후 별도 통지 없이 월 12,900원 자동 정기 결제로 전환되며, 회사가 합리적으로 판단하여 임의로 서비스를 중단할 수 있습니다.`,
       safe: `공정거래위원회 표준약관 준수 조항
 제1조(목적 및 서비스 제공)
-회사는 회원의 원활한 협업 도구 이용을 위해 최소한의 식별 정보(이메일, 닉네임)만을 수집하며, 결제 정보는 암호화 토큰으로 PG사에 직접 위탁됩니다.
+회사는 최소한의 식별 정보(이메일, 닉네임)만을 수집하며, 회원 탈퇴 시 즉시 파기합니다.
 제2조(환불 및 청약철회)
-전자상거래법에 따라 결제일로부터 7일 이내 서비스를 이용하지 않은 경우 전액 환불되며, 서비스 장애 발생 시 이용약관에 명시된 시간당 배상 기준에 따라 보상합니다.
-제3조(개인정보의 파기)
-회원 탈퇴 시 모든 프로젝트 및 개인 식별 정보는 30일의 유예기간 경과 후 영구 파기됩니다.`
+전자상거래법에 따라 결제일로부터 7일 이내 미이용 시 전액 환불됩니다.`
     };
 
     function loadPreset(key) {
@@ -949,7 +1012,7 @@
       loadingEl.classList.remove('hidden');
 
       try {
-        const backendRes = await fetch('http://localhost:8000/v1/clauses/analyze', {
+        const backendRes = await fetch(`${API_BASE}/v1/clauses/analyze`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -962,9 +1025,14 @@
         if (backendRes.ok) {
           const json = await backendRes.json();
           if (json.status === 'SUCCESS' && json.data) {
+            const allTraps = Array.from(new Set(
+              (json.data.analyzed_items || []).flatMap(i => i.trap_patterns || [])
+            ));
             const mapped = {
               overall_risk_level: json.data.overall_summary.risk_level,
+              risk_score: json.data.overall_summary.risk_score ?? (json.data.overall_summary.risk_level === 'RED' ? 82 : json.data.overall_summary.risk_level === 'YELLOW' ? 50 : 12),
               one_line_summary: json.data.overall_summary.one_line_summary,
+              trap_patterns: allTraps,
               items: (json.data.analyzed_items || []).map(item => ({
                 clause_title: item.title,
                 risk_level: item.risk_level,
@@ -977,9 +1045,9 @@
                 description: dp.description
               }))
             };
-            engineLabel.textContent = 'FastAPI 로컬 분석 엔진 연동됨';
+            engineLabel.textContent = `FastAPI 2-Tier 엔진 (${json.data.overall_summary.decision_engine || 'rule_engine'})`;
             renderCustomResult(mapped);
-            showToast('로컬 FastAPI 백엔드 엔진으로 정밀 분석을 완료했습니다.');
+            showToast('로컬 FastAPI 2-Tier 엔진으로 정밀 진단을 완료했습니다.');
             return;
           }
         }
@@ -997,104 +1065,114 @@
     }
 
     function runFallbackAnalyzer(text) {
-      const isRed = text.includes('환불이 일체 불가') || text.includes('영구히 양도') || text.includes('영구히 귀속') || text.includes('책임을 면합니다') || text.includes('제3자');
-      const isSafe = !isRed && (text.includes('표준약관') || text.includes('전액 환불') || text.includes('즉시 파기'));
-      const level = isRed ? 'RED' : isSafe ? 'GREEN' : 'YELLOW';
+      const traps = [];
+      let score = 10;
+      if (text.includes('다만,') || text.includes('단,')) { traps.push('EXCEPTION_REVERSAL'); score += 25; }
+      if (text.includes('별도 통지 없이') || text.includes('자동 정기 결제') || text.includes('간주')) { traps.push('SILENCE_CONSENT'); score += 25; }
+      if (text.includes('임의로') || text.includes('합리적으로 판단')) { traps.push('UNILATERAL_DISCRETION'); score += 20; }
+      if (text.includes('영구히 양도') || text.includes('영구 귀속') || text.includes('책임을 부담하지') || text.includes('면합니다')) { traps.push('ASYMMETRIC_LIABILITY'); score += 35; }
+      if (text.includes('환불이 일체 불가') || text.includes('위약금 30%') || text.includes('영구 보관') || text.includes('14개')) { traps.push('THRESHOLD_DEVIATION'); score += 30; }
+
+      score = Math.min(100, score);
+      const level = score >= 70 ? 'RED' : score >= 40 ? 'YELLOW' : 'GREEN';
 
       return {
         overall_risk_level: level,
+        risk_score: score,
+        trap_patterns: traps,
         one_line_summary:
           level === 'RED'
-            ? '공정위 표준약관 대비 환불 제한·저작권 귀속·포괄 면책 등 소비자 주의가 필요한 조항이 감지되었습니다.'
-            : level === 'GREEN'
-              ? '최소 정보 수집 및 표준 환불·파기 기준에 부합하는 비교적 안전한 약관입니다.'
-              : '일부 선택 동의 또는 주의가 필요한 문구가 포함되어 있습니다.',
-        items: [
-          {
-            clause_title: '핵심 약관 조항 진단',
-            risk_level: level,
-            evidence: text.split('\n').slice(0, 2).join(' ').slice(0, 110),
-            issue_description:
-              level === 'RED'
-                ? '청약철회 제한, 포괄적 면책 또는 이용자 권리 영구 귀속 소지가 있어 동의 전 확인이 필요합니다.'
-                : level === 'GREEN'
-                  ? '전자상거래법 7일 청약철회 및 최소 정보 수집 원칙에 부합합니다.'
-                  : '선택 동의 여부와 보유 기간을 확인한 뒤 동의하는 것을 권장합니다.',
-            recommended_action: level === 'RED' ? 'CAUTION_CHECK' : 'CHECK'
-          }
-        ],
-        dark_patterns: isRed
-          ? [{ pattern_name: '권리 제한 · 청약철회 방해', description: '소비자분쟁해결기준 대비 불리한 해지/환불 또는 권리 귀속 조건이 포함되어 있습니다.' }]
+            ? `공정위 표준약관 대비 ${traps.length || 1}건의 핵심 법률 함정이 감지되어 소비자 주의가 필요합니다.`
+            : level === 'YELLOW'
+              ? '일부 주의가 필요한 선택 동의 또는 단서 조항이 포함되어 있습니다.'
+              : '최소 정보 수집 및 표준 청약철회 기준에 부합하는 안전한 약관입니다.',
+        items: [{
+          clause_title: '핵심 조항 진단 결과',
+          risk_level: level,
+          evidence: text.split('\n').slice(0, 2).join(' ').slice(0, 120),
+          issue_description:
+            level === 'RED'
+              ? '환불 제한, 포괄 면책, 저작권 귀속 또는 단서 역전 소지가 있어 동의 전 확인이 필요합니다.'
+              : '전자상거래법 및 표준약관 기준에 부합합니다.',
+          recommended_action: level === 'RED' ? 'CAUTION_CHECK' : 'CHECK'
+        }],
+        dark_patterns: level === 'RED'
+          ? [{ pattern_name: '권리 제한 · 다크패턴 주의', description: '소비자분쟁해결기준 대비 불리한 조건이 감지되었습니다.' }]
           : []
       };
     }
 
     function renderCustomResult(data) {
       const badge = document.getElementById('custom-risk-badge');
-      const summaryText = document.getElementById('custom-summary-text');
-      const itemsContainer = document.getElementById('custom-items-container');
-      const darkContainer = document.getElementById('custom-darkpattern-container');
-      const darkSection = document.getElementById('custom-darkpattern-section');
-
       const level = data.overall_risk_level || 'YELLOW';
       if (level === 'RED') {
         badge.className = 'px-2.5 py-1 rounded-full text-[12px] font-bold bg-dangerSoft text-danger';
-        badge.textContent = '위험 (RED)';
+        badge.textContent = '위험 · RED';
       } else if (level === 'YELLOW') {
         badge.className = 'px-2.5 py-1 rounded-full text-[12px] font-bold bg-warnSoft text-warn';
-        badge.textContent = '주의 (YELLOW)';
+        badge.textContent = '주의 · YELLOW';
       } else {
         badge.className = 'px-2.5 py-1 rounded-full text-[12px] font-bold bg-safeSoft text-safe';
-        badge.textContent = '안전 (GREEN)';
+        badge.textContent = '안전 · GREEN';
       }
 
-      summaryText.textContent = data.one_line_summary;
+      updateGauge('custom-gauge-circle', 'custom-gauge-score', data.risk_score ?? 50, 26);
+      document.getElementById('custom-summary-text').textContent = data.one_line_summary;
 
-      itemsContainer.innerHTML = (data.items || []).map(item => {
+      // 5대 함정 칩
+      const trapsSec = document.getElementById('custom-traps-section');
+      const trapsBox = document.getElementById('custom-traps-container');
+      if (data.trap_patterns && data.trap_patterns.length > 0) {
+        trapsSec.classList.remove('hidden');
+        trapsBox.innerHTML = data.trap_patterns.map(t => `
+          <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-dangerSoft text-danger border border-red-100">
+            ${escapeHtml(TRAP_LABELS[t] || t)}
+          </span>
+        `).join('');
+      } else {
+        trapsSec.classList.add('hidden');
+      }
+
+      document.getElementById('custom-items-container').innerHTML = (data.items || []).map(item => {
         const tagClass =
           item.recommended_action === 'CHECK' ? 'bg-safeSoft text-safe' :
-          item.recommended_action === 'UNCHECK' ? 'bg-[#F2F4F6] text-sub' :
-          'bg-dangerSoft text-danger';
+          item.recommended_action === 'UNCHECK' ? 'bg-[#F3F4F6] text-sub' : 'bg-dangerSoft text-danger';
         const tagLabel =
           item.recommended_action === 'CHECK' ? '동의 권장' :
           item.recommended_action === 'UNCHECK' ? '해제 권장' : '주의 후 동의';
-
         return `
-          <div class="p-4 rounded-xl bg-white border border-line">
+          <div class="p-4 rounded-2xl bg-white border border-line">
             <div class="flex items-center justify-between gap-2 mb-2">
               <span class="font-bold text-[13px] text-ink">${escapeHtml(item.clause_title)}</span>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${tagClass}">${tagLabel}</span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${tagClass}">${tagLabel}</span>
             </div>
-            ${item.evidence ? `<div class="text-[12px] text-ink bg-warnSoft/80 border-l-2 border-warn px-3 py-2 rounded-r-lg mb-2 leading-relaxed">"${escapeHtml(item.evidence)}"</div>` : ''}
+            ${item.evidence ? `<div class="text-[12px] text-ink bg-warnSoft border-l-2 border-warn px-3 py-2 rounded-r-xl mb-2 leading-relaxed">"${escapeHtml(item.evidence)}"</div>` : ''}
             <p class="text-[12px] text-sub leading-relaxed">${escapeHtml(item.issue_description)}</p>
           </div>
         `;
       }).join('');
 
+      const dpSec = document.getElementById('custom-darkpattern-section');
+      const dpBox = document.getElementById('custom-darkpattern-container');
       if (data.dark_patterns && data.dark_patterns.length > 0) {
-        darkSection.classList.remove('hidden');
-        darkContainer.innerHTML = data.dark_patterns.map(dp => `
-          <div class="p-3.5 rounded-xl bg-dangerSoft border border-[#FFD6DA] text-[12px] text-[#9F1239] leading-relaxed">
+        dpSec.classList.remove('hidden');
+        dpBox.innerHTML = data.dark_patterns.map(dp => `
+          <div class="p-3.5 rounded-xl bg-dangerSoft border border-red-100 text-[12px] text-[#991B1B] leading-relaxed">
             <strong>${escapeHtml(dp.pattern_name)}</strong> — ${escapeHtml(dp.description)}
           </div>
         `).join('');
       } else {
-        darkSection.classList.add('hidden');
+        dpSec.classList.add('hidden');
       }
     }
 
     let toastTimer = null;
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
-      const msg = document.getElementById('toast-msg');
-      const dot = document.getElementById('toast-dot');
-
-      msg.textContent = message;
-      dot.className = type === 'warning' ? 'w-2 h-2 rounded-full bg-warn' : 'w-2 h-2 rounded-full bg-safe';
-
+      document.getElementById('toast-msg').textContent = message;
+      document.getElementById('toast-dot').className = type === 'warning' ? 'w-2 h-2 rounded-full bg-warn' : 'w-2 h-2 rounded-full bg-safe';
       toast.classList.remove('translate-y-12', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
-
       if (toastTimer) clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
@@ -1103,8 +1181,9 @@
     }
 
     window.onload = function () {
-      loadPreset('gym');
+      loadPreset('trap');
       renderVaultList();
+      checkBackendHealth();
     };
   </script>
 </body>
