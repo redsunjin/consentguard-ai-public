@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>약관·계약서 3초 판독기 — ConsentGuard AI</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --canvas: #F2F4F6;
+      --ink: #191F28;
+      --sub: #4E5968;
+      --muted: #8B95A1;
+      --line: #E5E8EB;
+      --blue: #3182F6;
+      --blue-hover: #1B64DA;
+      --blue-soft: #EBF3FE;
+      --red: #F04452;
+      --red-soft: #FFF0F1;
+      --warn: #E5850B;
+      --warn-soft: #FFF8EB;
+      --green: #00A86B;
+      --green-soft: #EDFAF4;
+    }
+    * { box-sizing: border-box; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      background: #E5E8EB;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .shell {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Top Header & Stepper */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      padding: 12px 18px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 32px;
+    }
+    .back-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 6px 4px 0;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .step-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .stepper-wrap {
+      margin-top: 10px;
+    }
+    .stepper-track {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .stepper-bar {
+      height: 4px;
+      border-radius: 999px;
+      background: var(--line);
+      transition: background 0.25s ease;
+    }
+    .stepper-bar.done { background: var(--blue); }
+    .stepper-bar.active { background: var(--blue); }
+    .stepper-labels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .stepper-labels span.active { color: var(--ink); font-weight: 700; }
+    .stepper-labels span:nth-child(2) { text-align: center; }
+    .stepper-labels span:nth-child(3) { text-align: right; }
+
+    /* Main Content Area */
+    .stage {
+      flex: 1;
+      padding: 24px 20px 136px;
+      animation: slideIn 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .title-lg {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 0 0 8px;
+      color: var(--ink);
+    }
+    .desc {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--sub);
+      margin: 0 0 24px;
+    }
+
+    /* Onboarding Step Cards */
+    .journey-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .journey-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #F9FAFB;
+      border: 1px solid var(--line);
+    }
+    .journey-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .journey-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+    .journey-sub { font-size: 13px; color: var(--sub); line-height: 1.45; }
+
+    /* Segmented Toggle */
+    .seg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--canvas);
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 10px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--sub);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .seg-btn.active {
+      background: #FFFFFF;
+      color: var(--ink);
+      box-shadow: 0 1px 4px rgba(25, 31, 40, 0.08);
+    }
+
+    /* Service Select List */
+    .svc-list { display: flex; flex-direction: column; gap: 10px; }
+    .svc-row {
+      width: 100%;
+      text-align: left;
+      padding: 15px 16px;
+      border-radius: 16px;
+      border: 1.5px solid var(--line);
+      background: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+    .svc-row.selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+    .svc-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+    .svc-cat { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* Inputs */
+    .input {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: #F9FAFB;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .input:focus { border-color: var(--blue); background: #FFFFFF; }
+    .preset-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .preset-chip {
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .preset-chip:active { background: var(--canvas); }
+
+    /* Score & Result Cards */
+    .score-hero {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 20px;
+      background: #F9FAFB;
+      border: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+    .gauge-ring { transition: stroke-dashoffset 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .chip-red { background: var(--red-soft); color: var(--red); }
+    .chip-warn { background: var(--warn-soft); color: var(--warn); }
+    .chip-green { background: var(--green-soft); color: var(--green); }
+
+    .guide-box {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      padding: 15px 16px;
+      margin-bottom: 12px;
+    }
+    .guide-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+    .guide-line { font-size: 13px; line-height: 1.5; margin-bottom: 4px; font-weight: 600; }
+
+    .preview-box {
+      background: #F9FAFB;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink);
+      white-space: pre-wrap;
+      margin: 0;
+    }
+
+    /* Fixed Bottom Thumb-Zone CTA */
+    .cta-dock {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 440px;
+      padding: 12px 20px calc(16px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, #FFFFFF 78%, rgba(255, 255, 255, 0));
+      z-index: 30;
+    }
+    .cta-btn {
+      width: 100%;
+      height: 54px;
+      border: none;
+      border-radius: 16px;
+      background: var(--blue);
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 6px 18px rgba(49, 130, 246, 0.25);
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+    .cta-btn:active { transform: scale(0.985); background: var(--blue-hover); }
+    .cta-btn:disabled { background: #B0B8C1; box-shadow: none; cursor: not-allowed; }
+    .cta-sub-link {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      border: none;
+      background: transparent;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .legal-note {
+      margin-top: 20px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+      text-align: center;
+    }
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed;
+      bottom: 92px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+
+    <!-- Header & Step Indexer (Hidden on Onboarding) -->
+    <header id="app-topbar" class="topbar hidden">
+      <div class="topbar-row">
+        <button id="btn-back" class="back-btn" aria-label="이전 단계">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          <span id="back-label">이전</span>
+        </button>
+        <span id="step-badge" class="step-badge">1 / 3 단계</span>
+      </div>
+      <div class="stepper-wrap">
+        <div class="stepper-track">
+          <div id="bar-1" class="stepper-bar active"></div>
+          <div id="bar-2" class="stepper-bar"></div>
+          <div id="bar-3" class="stepper-bar"></div>
+        </div>
+        <div class="stepper-labels">
+          <span id="lbl-1" class="active">1. 약관 선택</span>
+          <span id="lbl-2">2. 위험도 진단</span>
+          <span id="lbl-3">3. 바로 대응</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- STEP 0: Onboarding -->
+    <main id="step-0" class="stage">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:var(--green-soft);color:var(--green);font-size:12px;font-weight:700;margin-bottom:16px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--green);"></span>
+        개인정보 무저장 · Zero-Retention
+      </div>
+
+      <h1 class="title-lg" style="font-size:27px;">
+        사인하기 전에,<br />불리한 조항만 찾아드려요
+      </h1>
+      <p class="desc">
+        어려운 약관과 계약서를 다 읽지 않아도 괜찮아요.<br />
+        딱 3단계만 따라오면 끝납니다.
+      </p>
+
+      <!-- Pre-indexed 3-Step Journey -->
+      <div class="journey-list">
+        <div class="journey-item">
+          <div class="journey-num">01</div>
+          <div>
+            <div class="journey-title">약관 고르기</div>
+            <div class="journey-sub">가입할 서비스를 선택하거나 계약서 파일·텍스트를 올려요.</div>
+          </div>
+        </div>
+        <div class="journey-item">
+          <div class="journey-num">02</div>
+          <div>
+            <div class="journey-title">위험 점수와 함정 확인</div>
+            <div class="journey-sub">0~100점 점수와 꼭 피해야 할 5대 법률 함정만 짚어드려요.</div>
+          </div>
+        </div>
+        <div class="journey-item">
+          <div class="journey-num">03</div>
+          <div>
+            <div class="journey-title">문구 복사해서 바로 대응</div>
+            <div class="journey-sub">정중한 카톡 수정 요청 멘트나 제37조 철회서를 바로 복사해요.</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="legal-note">
+        공정거래위원회 표준약관 기준 비교·요약 도구이며 법률 자문을 대신하지 않습니다.
+      </p>
+    </main>
+
+    <!-- STEP 1: Choose or Upload Terms -->
+    <main id="step-1" class="stage hidden">
+      <h2 class="title-lg">어떤 약관을 확인할까요?</h2>
+      <p class="desc">인기 서비스를 고르거나 계약서를 직접 올려 주세요.</p>
+
+      <div class="seg">
+        <button id="mode-catalog-btn" class="seg-btn active">인기 서비스 선택</button>
+        <button id="mode-direct-btn" class="seg-btn">파일 · 텍스트 입력</button>
+      </div>
+
+      <!-- Mode A: Popular Service Selection -->
+      <div id="input-mode-catalog">
+        <input id="svc-search-input" class="input" style="margin-bottom:12px;" type="search" placeholder="서비스명 검색 (헬스장, 배달, 알바, OTT)" />
+        <div id="svc-catalog-list" class="svc-list"></div>
+      </div>
+
+      <!-- Mode B: File / Direct Text -->
+      <div id="input-mode-direct" class="hidden">
+        <label style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1.5px dashed #CBD5E1;border-radius:16px;background:#F9FAFB;cursor:pointer;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3182F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span id="toss-file-label" style="font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">PDF · TXT 파일 올리기</span>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">선택</span>
+          <input id="toss-file-input" type="file" accept=".pdf,.txt,.md" class="hidden" />
+        </label>
+
+        <div class="preset-row">
+          <button class="preset-chip" data-preset="gym">헬스장 환불불가</button>
+          <button class="preset-chip" data-preset="trap">단서 역전 · 자동결제</button>
+          <button class="preset-chip" data-preset="safe">안전한 표준약관</button>
+        </div>
+
+        <textarea id="toss-terms-input" rows="6" class="input" style="resize:vertical;" placeholder="약관이나 계약서 문구를 붙여넣어 주세요."></textarea>
+      </div>
+    </main>
+
+    <!-- STEP 2: Focused Diagnosis Result -->
+    <main id="step-2" class="stage hidden">
+      <h2 id="res-headline" class="title-lg">확인해야 할 조항이 있어요</h2>
+      <p id="res-sub" class="desc">핵심 위험 점수와 체크할 항목만 간추렸습니다.</p>
+
+      <div class="score-hero">
+        <div style="position:relative;width:68px;height:68px;flex-shrink:0;">
+          <svg width="68" height="68" viewBox="0 0 68 68" style="transform:rotate(-90deg);">
+            <circle cx="34" cy="34" r="28" fill="none" stroke="#E5E8EB" stroke-width="6" />
+            <circle id="res-gauge-circle" class="gauge-ring" cx="34" cy="34" r="28" fill="none" stroke="#F04452" stroke-width="6" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="175.9" />
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;" id="res-score-num">0</div>
+        </div>
+        <div style="min-width:0;">
+          <span id="res-risk-chip" class="chip chip-red" style="margin-bottom:6px;">위험</span>
+          <div id="res-summary-text" style="font-size:13px;font-weight:600;color:var(--ink);line-height:1.45;"></div>
+        </div>
+      </div>
+
+      <div id="res-traps-wrap" class="guide-box hidden">
+        <div class="guide-label">감지된 5대 법률 함정</div>
+        <div id="res-traps-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <div class="guide-box">
+        <div class="guide-label">이렇게 체크하세요</div>
+        <div id="res-check-guide"></div>
+      </div>
+
+      <p class="legal-note">
+        본 결과는 공정위 표준약관 기준 비교 정보이며 법률 자문이 아닙니다.
+      </p>
+    </main>
+
+    <!-- STEP 3: Take Action (KakaoTalk Script / Article 37 Revoke) -->
+    <main id="step-3" class="stage hidden">
+      <h2 class="title-lg">복사해서 바로 보내세요</h2>
+      <p class="desc">상황에 맞는 대응 문구를 선택해 바로 사용할 수 있어요.</p>
+
+      <div class="seg">
+        <button id="act-nego-btn" class="seg-btn active">카톡 수정 요청</button>
+        <button id="act-revoke-btn" class="seg-btn">제37조 동의 철회서</button>
+      </div>
+
+      <!-- Action A: KakaoTalk Negotiation -->
+      <div id="act-panel-nego">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button id="toss-tone-polite" class="preset-chip" style="background:var(--ink);color:#fff;border-color:var(--ink);">정중하게 요청</button>
+          <button id="toss-tone-firm" class="preset-chip">단호하게 요청</button>
+        </div>
+        <pre id="toss-nego-text" class="preview-box"></pre>
+      </div>
+
+      <!-- Action B: Article 37 Revoke -->
+      <div id="act-panel-revoke" class="hidden">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <input id="toss-revoke-service" class="input" style="padding:10px 12px;font-size:13px;" placeholder="서비스명" value="넥서스클럽" />
+          <input id="toss-revoke-account" class="input" style="padding:10px 12px;font-size:13px;" placeholder="가입 이메일" value="user@korea.com" />
+        </div>
+        <pre id="toss-revoke-text" class="preview-box"></pre>
+      </div>
+
+      <p class="legal-note">
+        원활한 협의와 법정 권리 행사를 돕기 위한 참고 초안입니다.
+      </p>
+    </main>
+
+    <!-- Fixed Bottom Single Primary CTA -->
+    <div class="cta-dock">
+      <button id="primary-cta" class="cta-btn">시작하기</button>
+      <button id="secondary-cta" class="cta-sub-link hidden">다른 약관 진단하기</button>
+    </div>
+
+  </div>
+
+  <div id="toss-toast" class="toast">알림</div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
