@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>약관·계약서 3초 판독기 — ConsentGuard AI</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg: #F2F4F6;
+      --surface: #FFFFFF;
+      --ink: #191F28;
+      --sub: #4E5968;
+      --muted: #8B95A1;
+      --line: #E5E8EB;
+      --blue: #3182F6;
+      --blue-hover: #1B64DA;
+      --red: #F04452;
+      --red-soft: #FFF0F1;
+      --warn: #E5850B;
+      --warn-soft: #FFF8EB;
+      --green: #00A86B;
+      --green-soft: #EDFAF4;
+    }
+    * { box-sizing: border-box; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .app-shell {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 76px;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand { font-size: 16px; font-weight: 800; color: var(--ink); }
+    .pill-zero {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 9px; border-radius: 999px;
+      background: var(--green-soft); color: var(--green);
+    }
+    .content { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(25, 31, 40, 0.04);
+    }
+    .h1 { font-size: 20px; font-weight: 800; margin: 0 0 6px; line-height: 1.3; }
+    .sub { font-size: 13px; color: var(--sub); margin: 0; line-height: 1.5; }
+    .input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: #F9FAFB;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .input:focus { border-color: var(--blue); background: #FFFFFF; }
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: var(--blue);
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-primary:active { background: var(--blue-hover); }
+    .btn-secondary {
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 8px;
+    }
+    .chip-red { background: var(--red-soft); color: var(--red); }
+    .chip-warn { background: var(--warn-soft); color: var(--warn); }
+    .chip-green { background: var(--green-soft); color: var(--green); }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 8px 6px 12px;
+      z-index: 30;
+    }
+    .nav-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .nav-btn.active { color: var(--blue); background: #EBF3FE; }
+    .hidden { display: none !important; }
+    .disclaimer {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      padding: 6px 16px 16px;
+      line-height: 1.45;
+    }
+    .toast {
+      position: fixed;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <span class="brand">🛡️ 약관·계약서 3초 판독기</span>
+      <span class="pill-zero">Zero-Retention</span>
+    </header>
+
+    <main class="content">
+      <!-- TAB 1: 서비스 3초 검색 -->
+      <section id="toss-view-search" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <h1 class="h1">가입 전 서비스 이름만 검색하세요</h1>
+          <p class="sub" style="margin-bottom:12px;">필수만 체크하고 제3자 제공·자동결제를 피하는 3초 가이드</p>
+          <input id="svc-search-input" class="input" type="search" placeholder="예: 헬스장, 배달, 알바, 넥서스, OTT" />
+        </div>
+        <div id="svc-catalog-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+      </section>
+
+      <!-- TAB 2: 약관·계약서 3초 판독 + 카톡 멘트 -->
+      <section id="toss-view-analyze" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <h1 class="h1">계약서·약관 독소조항 판독</h1>
+          <p class="sub" style="margin-bottom:12px;">PDF·TXT 파일을 올리거나 조항을 붙여넣으면 0~100점 점수와 카톡 수정 멘트를 만들어 드려요.</p>
+
+          <label style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px dashed #CBD5E1;border-radius:14px;background:#F9FAFB;cursor:pointer;margin-bottom:10px;">
+            <span id="toss-file-label" style="font-size:13px;font-weight:700;color:var(--ink);">📎 PDF · TXT 파일 선택</span>
+            <span style="font-size:11px;font-weight:700;color:var(--blue);">업로드</span>
+            <input id="toss-file-input" type="file" accept=".pdf,.txt,.md" class="hidden" />
+          </label>
+
+          <textarea id="toss-terms-input" rows="6" class="input" style="resize:vertical;margin-bottom:10px;" placeholder="예: 7일 이내 환불 가능합니다. 다만, 특가 상품은 환불이 일체 불가하며 30일 후 별도 통지 없이 자동 결제됩니다."></textarea>
+
+          <button id="toss-analyze-btn" class="btn-primary">3초 리스크 진단하기</button>
+        </div>
+
+        <div id="toss-result-card" class="card hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-size:15px;font-weight:800;">진단 결과</span>
+            <span id="toss-score-badge" class="chip chip-red">위험 · 84점</span>
+          </div>
+          <p id="toss-summary-text" class="sub" style="color:var(--ink);font-weight:600;margin-bottom:10px;"></p>
+          <div id="toss-traps-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;"></div>
+
+          <div style="background:#FFFDF2;border:1px solid #FDE68A;border-radius:14px;padding:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:12px;font-weight:800;">💬 카톡 수정 요청 멘트</span>
+              <div style="display:flex;gap:4px;">
+                <button id="toss-tone-polite" class="btn-secondary" style="background:var(--ink);color:#fff;">정중하게</button>
+                <button id="toss-tone-firm" class="btn-secondary">단호하게</button>
+              </div>
+            </div>
+            <pre id="toss-nego-text" style="margin:0 0 10px;white-space:pre-wrap;font-size:12px;line-height:1.5;color:var(--ink);background:#fff;padding:10px;border-radius:10px;border:1px solid #FDE68A;"></pre>
+            <button id="toss-copy-nego-btn" class="btn-primary" style="padding:10px;font-size:13px;">카톡 멘트 복사하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: 제37조 철회서 -->
+      <section id="toss-view-revoke" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card">
+          <h1 class="h1">제37조 동의 철회 요청서</h1>
+          <p class="sub" style="margin-bottom:12px;">이미 동의한 보험사 제3자 제공·스팸 마케팅을 법정 근거로 철회합니다.</p>
+          <input id="toss-revoke-service" class="input" style="margin-bottom:8px;" placeholder="서비스명 (예: 넥서스클럽)" value="넥서스클럽" />
+          <input id="toss-revoke-account" class="input" style="margin-bottom:10px;" placeholder="가입 이메일 또는 아이디" value="user@korea.com" />
+          <button id="toss-revoke-gen-btn" class="btn-primary">철회 요청서 생성</button>
+        </div>
+
+        <div id="toss-revoke-result" class="card hidden">
+          <pre id="toss-revoke-text" style="margin:0 0 12px;white-space:pre-wrap;font-size:12px;line-height:1.55;color:var(--sub);background:#F9FAFB;padding:12px;border-radius:12px;border:1px solid var(--line);"></pre>
+          <button id="toss-copy-revoke-btn" class="btn-primary" style="padding:11px;font-size:13px;">철회 요청서 복사하기</button>
+        </div>
+      </section>
+
+      <div class="disclaimer">
+        본 미니앱은 공정거래위원회 표준약관 기준에 따른 텍스트 비교·요약 도구이며, 법률 자문을 대신하지 않습니다.
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <button id="nav-search" class="nav-btn active">🔍 서비스 검색</button>
+      <button id="nav-analyze" class="nav-btn">📄 3초 판독</button>
+      <button id="nav-revoke" class="nav-btn">✉️ 제37조 철회</button>
+    </nav>
+  </div>
+
+  <div id="toss-toast" class="toast">알림</div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
